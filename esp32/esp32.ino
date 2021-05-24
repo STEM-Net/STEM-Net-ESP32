@@ -8,9 +8,6 @@
 const char* ssid     = "sense";
 const char* password = "password";
 
-/*String containing Hostname, Device Id & Device Key in the format:                         */
-/*  "HostName=<host_name>;DeviceId=<device_id>;SharedAccessKey=<device_key>"                */
-/*  "HostName=<host_name>;DeviceId=<device_id>;SharedAccessSignature=<device_sas_token>"    */
 static const char* connectionString = "HostName=sensors.azure-devices.net;DeviceId=device;SharedAccessKey=kHkG1Q68YZjsEDOLe0Zi0SON2BtlqTydD/4pJbJwe0Q=";
 const char *messageData = "{\"messageId\":%d, \"Moisture\":%f}";
 static bool hasIoTHub = false;
