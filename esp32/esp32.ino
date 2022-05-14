@@ -1,14 +1,14 @@
 #include <WiFi.h>
 #include "Esp32MQTTClient.h"
 
-#define INTERVAL 10000
+#define INTERVAL 240000
 #define MESSAGE_MAX_LEN 256
 #define SENSOR 39
 // Please input the SSID and password of WiFi
-const char* ssid     = "sense";
-const char* password = "password";
+const char* ssid     = "";
+const char* password = "";
 
-static const char* connectionString = "HostName=sensors.azure-devices.net;DeviceId=device;SharedAccessKey=kHkG1Q68YZjsEDOLe0Zi0SON2BtlqTydD/4pJbJwe0Q=";
+static const char* connectionString = "";
 const char *messageData = "{\"messageId\":%d, \"Moisture\":%f}";
 static bool hasIoTHub = false;
 static bool hasWifi = false;
@@ -32,19 +32,19 @@ static void MessageCallback(const char* payLoad, int size)
 
 static void DeviceTwinCallback(DEVICE_TWIN_UPDATE_STATE updateState, const unsigned char *payLoad, int size)
 {
-  char *temp = (char *)malloc(size + 1);
-  if (temp == NULL)
+  char *moisture = (char *)malloc(size + 1);
+  if (moisture == NULL)
   {
     return;
   }
-  memcpy(temp, payLoad, size);
-  temp[size] = '\0';
+  memcpy(moisture, payLoad, size);
+  moisture[size] = '\0';
   // Display Twin message.
-  Serial.println(temp);
-  free(temp);
+  Serial.println(moisture);
+  free(moisture);
 }
 
-static int  DeviceMethodCallback(const char *methodName, const unsigned char *payload, int size, unsigned char **response, int *response_size)
+static int DeviceMethodCallback(const char *methodName, const unsigned char *payload, int size, unsigned char **response, int *response_size)
 {
   LogInfo("Try to invoke method %s", methodName);
   const char *responseMessage = "\"Successfully invoke device method\"";
@@ -52,12 +52,12 @@ static int  DeviceMethodCallback(const char *methodName, const unsigned char *pa
 
   if (strcmp(methodName, "start") == 0)
   {
-    LogInfo("Start sending temperature and humidity data");
+    LogInfo("Start sending moisture data");
     messageSending = true;
   }
   else if (strcmp(methodName, "stop") == 0)
   {
-    LogInfo("Stop sending temperature and humidity data");
+    LogInfo("Stop sending moisture data");
     messageSending = false;
   }
   else
